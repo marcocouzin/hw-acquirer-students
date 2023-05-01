@@ -5,7 +5,7 @@ springdoc:
     path: /swagger-ui.html
 spring:
   datasource:
-    url: ${JDBC_DATABASE_URL:jdbc:postgresql://fiap.com:5432/acquirerdb}
+    url: ${JDBC_DATABASE_URL:jdbc:postgresql://mczsolution.com:5432/acquirerdb}
   jpa:
     hibernate:
       ddl-auto: update
