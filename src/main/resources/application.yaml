@@ -1,14 +1,13 @@
 server:
-  port: 443
+  port: ${PORT:5000}
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
 spring:
   datasource:
-    url: ${JDBC_DATABASE_URL:jdbc:postgresql://fiap.com:5432/acquirerdb}
-#    url: ${JDBC_DATABASE_URL}
-#    username: ${JDBC_DATABASE_USERNAME}
-#    password: ${JDBC_DATABASE_PASSWORD}
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
