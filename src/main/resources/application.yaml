@@ -1,9 +1,14 @@
+server:
+  port: 443
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
 spring:
   datasource:
-    url: ${JDBC_DATABASE_URL:jdbc:postgresql://mczsolution.com:5432/acquirerdb}
+#    url: ${JDBC_DATABASE_URL:jdbc:postgresql://mczsolution.com:5432/acquirerdb}
+    url: postgres://aizryurojwigqd:333bbcf9c73134c810dab288ab122385f9107cde93cc3a9f857a6c23c4906a40@ec2-52-1-92-133.compute-1.amazonaws.com:5432/d729r1p6ku41gr
+    username: aizryurojwigqd
+    password: 333bbcf9c73134c810dab288ab122385f9107cde93cc3a9f857a6c23c4906a40
   jpa:
     hibernate:
       ddl-auto: update
