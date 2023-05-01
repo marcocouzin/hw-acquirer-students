@@ -5,9 +5,7 @@ springdoc:
     path: /swagger-ui.html
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/acquirerdb
-    username: root
-    password: Gringotts
+    url: ${JDBC_DATABASE_URL:jdbc:postgresql://fiap.com:5432/acquirerdb}
   jpa:
     hibernate:
       ddl-auto: update
@@ -21,3 +19,5 @@ spring:
 jwt:
   secret: s3cr37F14Ps3cr37F14Ps3cr37F14Ps3cr37F14Ps3cr37F14Ps3cr37F14Ps3cr37F14Ps3cr37F14P
   expirationInSeconds: 1800
+
+#spring.datasource.url=${JDBC_DATABASE_URL:jdbc:postgresql://example.com:5432/database}
