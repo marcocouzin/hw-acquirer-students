@@ -1,5 +1,5 @@
 server:
-  port: ${PORT:5000}
+  port: ${PORT:8082}
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
@@ -18,8 +18,5 @@ spring:
       name: username
       password: secret
       roles: USER
-jwt:
-  secret: s3cr37F14Ps3cr37F14Ps3cr37F14Ps3cr37F14Ps3cr37F14Ps3cr37F14Ps3cr37F14Ps3cr37F14P
-  expirationInSeconds: 1800
-
-#spring.datasource.url=${JDBC_DATABASE_URL:jdbc:postgresql://example.com:5432/database}
+acquirer:
+  base-aut-url: ${URL_AUTH}

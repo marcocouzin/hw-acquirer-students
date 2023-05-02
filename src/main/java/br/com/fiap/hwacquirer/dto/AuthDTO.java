@@ -1,7 +1,10 @@
 package br.com.fiap.hwacquirer.dto;
 
+import br.com.fiap.hwacquirer.dto.security.Principal;
+
 public record AuthDTO(
-        String username,
-        String password
+        String name,
+        Principal principal
+
 ) {
 }

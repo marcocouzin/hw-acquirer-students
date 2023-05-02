@@ -1,34 +1,32 @@
 package br.com.fiap.hwacquirer.security;
 
-import io.jsonwebtoken.ExpiredJwtException;
+import br.com.fiap.hwacquirer.dto.AuthDTO;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.*;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    private final Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
-    private final JwtUtil JwtUtil;
-    private final JwtUserDetailsService jwtUserDetailsService;
+    @Value("${acquirer.base-aut-url}")
+    private String baseAuthUrl;
 
-    public JwtRequestFilter(JwtUtil JwtUtil,
-                            JwtUserDetailsService jwtUserDetailsService) {
-        this.JwtUtil = JwtUtil;
-        this.jwtUserDetailsService = jwtUserDetailsService;
-    }
+    private final Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -38,22 +36,28 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = null;
         String token;
 
-        if (requestToken != null && requestToken.startsWith("Bearer")) {
-            token = requestToken.replace("Bearer ", "");
-            try {
-                username = JwtUtil.getUserNameFromToken(token);
-            } catch (IllegalArgumentException illegalArgumentException) {
-                logger.info("Unable to parse JWT token");
-            } catch (ExpiredJwtException expiredJwtException) {
-                logger.info("Token expired");
-            }
-        } else {
-            logger.info("Incorrect token");
-        }
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.set(HttpHeaders.AUTHORIZATION, request.getHeader(HttpHeaders.AUTHORIZATION));
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<String> requestEntity = new HttpEntity<String>(httpHeaders);
 
+        ResponseEntity<AuthDTO> responseEntity = restTemplate.exchange(baseAuthUrl, HttpMethod.GET, requestEntity, AuthDTO.class);
+        AuthDTO auth = responseEntity.getBody();
+
+        User userDetails = new User(
+                Objects.requireNonNull(auth).name(),
+                auth.principal().password(),
+                auth.principal().enabled(),
+                auth.principal().accountNonExpired(),
+                auth.principal().credentialsNonExpired(),
+                auth.principal().accountNonLocked(),
+                auth.principal().authorities()
+        );
+
+
+        if (auth.name() != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails,
                     null,
