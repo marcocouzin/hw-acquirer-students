@@ -1,0 +1,357 @@
+{
+	"info": {
+		"_postman_id": "68984016-9bcd-44a0-8cd2-877421f3d873",
+		"name": "FIAP - Home Work - Webservice-Restful",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2881749"
+	},
+	"item": [
+		{
+			"name": "Security",
+			"item": [
+				{
+					"name": "01.Create Credential",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"mcouzingmail.com\",\n    \"password\": \"teste123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_AUTH_URL}}/users",
+							"host": [
+								"{{BASE_AUTH_URL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "02.Cliente Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									" ",
+									"// console.log(jsonData.token);",
+									"",
+									"pm.environment.set(\"ACCESS_TOKEN\", jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"mcouzingmail.com\",\n    \"password\": \"teste123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_AUTH_URL}}/users/login",
+							"host": [
+								"{{BASE_AUTH_URL}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "03.Validate Authentication",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_AUTH_URL}}/users/validate",
+							"host": [
+								"{{BASE_AUTH_URL}}"
+							],
+							"path": [
+								"users",
+								"validate"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Students Resources",
+			"item": [
+				{
+					"name": "Listar todos os alunos (id, nome e curso)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_SERVICE_URL}}/students",
+							"host": [
+								"{{BASE_SERVICE_URL}}"
+							],
+							"path": [
+								"students"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar todos os alunos por curso (id, nome e curso)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_SERVICE_URL}}/students?course=3SCJR",
+							"host": [
+								"{{BASE_SERVICE_URL}}"
+							],
+							"path": [
+								"students"
+							],
+							"query": [
+								{
+									"key": "course",
+									"value": "3SCJR"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta aluno por ID (Mostra todos os campos)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_SERVICE_URL}}/students/1",
+							"host": [
+								"{{BASE_SERVICE_URL}}"
+							],
+							"path": [
+								"students",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualiza o status do aluno",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"disabled\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_SERVICE_URL}}/students/1",
+							"host": [
+								"{{BASE_SERVICE_URL}}"
+							],
+							"path": [
+								"students",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cria um novo aluno",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Helena Couzin\",\n    \"email\": \"helena@gmail.com\",\n    \"birthDate\": \"2020-04-01\",\n    \"course\": \"3SCJR\"\n}\n\n// {\n//     \"name\": \"Bruna Couzin\",\n//     \"email\": \"bruna@gmail.com\",\n//     \"birthDate\": \"2010-11-01\",\n//     \"course\": \"3SCJR\"\n// }\n// {\n//     \"name\": \"Aline de Paula\",\n//     \"email\": \"aline@gmail.com\",\n//     \"birthDate\": \"1985-07-11\",\n//     \"course\": \"2SCJR\"\n// }\n\n// {\n//     \"name\": \"Marco Couzin\",\n//     \"email\": \"marco@gmail.com\",\n//     \"birthDate\": \"1978-06-16\",\n//     \"course\": \"1SCJR\"\n// }\n\n// {\n//     \"name\": \"Ota fumiga\",\n//     \"email\": \"otafumiga@gmail.com\",\n//     \"birthDate\": \"2020-04-01\",\n//     \"course\": \"3SCJR\"\n// }\n\n// {\n//     \"name\": \"fumiga\",\n//     \"email\": \"fumiga@gmail.com\",\n//     \"birthDate\": \"2020-04-01\",\n//     \"course\": \"3SCJR\"\n// }\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_SERVICE_URL}}/students",
+							"host": [
+								"{{BASE_SERVICE_URL}}"
+							],
+							"path": [
+								"students"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualiza os dados do aluno (menos id e status)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Ota fumiga v 2.0\",\n    \"email\": \"fumiga@gmail.com\",\n    \"birthDate\": \"2000-02-03\",\n    \"course\": \"3SCJR\"\n}\n\n// {\n//     \"name\": \"fumiga\",\n//     \"email\": \"fumiga@gmail.com\",\n//     \"birthDate\": \"2020-04-01\",\n//     \"course\": \"3SCJR\"\n// }\n\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_SERVICE_URL}}/students/1",
+							"host": [
+								"{{BASE_SERVICE_URL}}"
+							],
+							"path": [
+								"students",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Apaga aluno por id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_SERVICE_URL}}/students/3",
+							"host": [
+								"{{BASE_SERVICE_URL}}"
+							],
+							"path": [
+								"students",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
